@@ -9,10 +9,12 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@livereader/graphly-d3": "^1.3.3",
     "@vueuse/core": "^9.0.0",
     "bootstrap-vue": "^2.22.0",
     "core-js": "^3.24.0",
     "flowchart-vue": "^0.29.0",
+    "gojs": "^2.2.20",
     "leader-line": "^1.0.7",
     "leader-line-new": "^1.1.9",
     "leader-line-vue": "^2.1.1",

@@ -9,7 +9,8 @@
               id="ps"
               @click="redirect('/phrase-structure')"
           >
-            Phrase<br>Structure
+          <span style="font-size:0.6em;">Phrase</span><br>
+          <span style="font-size:0.6em;">Structure</span>
           </b-button>
         </b-col>
         <b-col></b-col>
@@ -21,7 +22,8 @@
               id="mh"
               @click="redirect('/meter-hypermeter')"
           >
-            Meter and <br>Hypermeter
+          <span style="font-size:0.6em;">Meter and</span> <br>
+          <span style="font-size:0.6em;">Hypermeter</span>
           </b-button>
         </b-col>
         <b-col>
@@ -30,7 +32,8 @@
               id="mghr"
               @click="redirect('/mg-harmonic-dagRhythm')"
           >
-            Harmonic<br>Rhythm
+          <span style="font-size:0.6em;">Harmonic</span><br>
+          <span style="font-size:0.6em;">Rhythm</span>
           </b-button>
         </b-col>
         <b-col>
@@ -39,7 +42,7 @@
               id="mghp"
               @click="redirect('/harmonic-progression')"
           >
-            Harmonic Progression
+          <span style="font-size:0.6em;">Harmonic Progression</span>
           </b-button>
         </b-col>
       </b-row>
@@ -51,7 +54,7 @@
               variant="warning"
               id="mgm"
               @click="redirect('/middleground-melody')"
-          >Middleground Melody</b-button>
+          ><span style="font-size:0.6em;">Middleground Melody</span></b-button>
         </b-col>
       </b-row>
       <b-row class="my-4 myRow">
@@ -61,14 +64,14 @@
               variant="danger"
               id="fgmr"
               @click="redirect('/foreground-rhythm')"
-          >Melodic<br>Rhythm</b-button>
+          ><span style="font-size:0.6em;">Melodic</span><br><span style="font-size:0.6em;">Rhythm</span></b-button>
         </b-col>
         <b-col>
           <b-button
               variant="warning"
               id="fgm"
               @click="redirect('/foreground-melody')"
-          >Foreground Melody</b-button>
+          ><span style="font-size:0.6em;">Foreground Melody</span></b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -201,6 +204,27 @@ function drawLines() {
   mgm_fgm = createLine(mgmDiv, fgmDiv, 'bottom', 'top', [0, 0], mgmFgm.value)
   //From Foreground Melodic Rhythm
   fgmr_fgm = createLine(fgmrDiv, fgmDiv, 'right','left',[0, 0], fgmrFgm.value)
+
+  console.log(ps_mh);
+
+  document.addEventListener('scroll', function() {
+    repositionLines();
+  }, false)
+
+}
+
+function repositionLines() {
+    ps_mh.position();
+    ps_mghr.position();
+    ps_mghp.position();
+    mh_mghr.position();
+    mh_fgmr.position();
+    mghr_fgmr.position();
+    mghr_mghp.position();
+    mghr_mgm.position();
+    mghp_mgm.position();
+    mgm_fgm.position();
+    fgmr_fgm.position();
 }
 
 function activateAnimation(refNames: string[], activate: boolean = true) {
@@ -236,6 +260,8 @@ function activateAnimation(refNames: string[], activate: boolean = true) {
 }
 
 .myRow {
-  width: 600px;
+  width: 400px;
 }
+
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="background">
 <!--    NAVBAR-->
-    <b-navbar class="white-background" toggleable="lg">
+    <b-navbar class="white-background website-nav fixed-top" toggleable="lg">
       <b-navbar-brand @click="router.push({path: '/'})">
         <img
             src="@/static/schenkcomposer_logo.svg"
@@ -21,55 +21,76 @@
           <b-nav-item @click="router.push({path: '/login'})">Login</b-nav-item>
           <b-nav-item @click="router.push({path: '/my-melodies'})">{{username}}'s Melodies</b-nav-item>
         </b-navbar-nav>
+        <b-button id="sidebar-btn" variant="dark" @click="sidebar_closed=!sidebar_closed">Toggle Sidebar</b-button>
       </b-collapse>
     </b-navbar>
-    <b-row>
-      <b-col class="mt-5">
-<!--        DAG FLOWCHART-->
-        <b-container style="overflow: auto">
-          <div class="p-2 ml-3 black-background radius-30" style="width: 650px; height: 500px;">
-            <SchenkComposerDAG
-                :phrase-anim="phrase_anim"
-                :meter-anim="meter_anim"
-                :mgrhythm-anim="mgrhythm_anim"
-                :mgharmony-anim="mgharmony_anim"
-                :fgrhythm-anim="fgrhythm_anim"
-                :mgmelody-anim="mgmelody_anim"
-            ></SchenkComposerDAG>
-          </div>
-        </b-container>
-      </b-col>
-<!--      TUTORIAL-->
-      <b-col class="mt-5">
-        <b-container class="overflow-auto" style="height: 500px;">
-          <b-container class="p-5 black-background radius-30">
-            <h1>Tutorial</h1>
-            <router-view
-                name="tutorial"
-            />
+    <b-container>
+      <b-row>
+        <!-- DAG sidebar col -->
+        <b-col>
+            <div v-if="!sidebar_closed" class="dag-sidebar pos-static">
+            <!--DAG FLOWCHART-->
+            <b-container style="overflow: auto">
+                <div class="p-2 ml-3 black-background radius-30" style="width: 425px; height: 500px;">
+                  <SchenkComposerDAG
+                      :phrase-anim="phrase_anim"
+                      :meter-anim="meter_anim"
+                      :mgrhythm-anim="mgrhythm_anim"
+                      :mgharmony-anim="mgharmony_anim"
+                      :fgrhythm-anim="fgrhythm_anim"
+                      :mgmelody-anim="mgmelody_anim"
+                  ></SchenkComposerDAG>
+                </div>
+            </b-container>
+            </div>
+        </b-col>
+        <!-- Main content col -->
+        <b-col>
+          <b-container class="main-content">
+            <!--      TUTORIAL-->
+            <b-col class="mt-5">
+              <b-container class="overflow-auto" style="height: 500px;">
+                <b-container class="p-5 black-background radius-30">
+                  <h1>Tutorial</h1>
+                  <router-view
+                      name="tutorial"
+                  />
+                </b-container>
+              </b-container>
+            </b-col>
+            <!--      ROUTER VIEW-->
+            <b-row>
+              <b-col class="m-4 p-3 black-background" style="border-radius: 30px">
+                <router-view
+                    @psanimate="phraseStructureAnimate($event)"
+                    @meteranimate="meterAnimate($event)"
+                    @mgrhythmanimate="mgrhythmAnimate($event)"
+                    @mgharmonyanimate="mgharmonyAnimate($event)"
+                    @mgmelodyanimate="mgmelodyAnimate($event)"
+                    @fgrhythmanimate="fgrhythmAnimate($event)"
+                    name="default"
+                />
+              </b-col>
+            </b-row>
           </b-container>
-        </b-container>
-      </b-col>
-    </b-row>
-    <!--      ROUTER VIEW-->
-    <b-row>
-      <b-col class="m-4 p-3 black-background" style="border-radius: 30px">
-        <router-view
-            @psanimate="phraseStructureAnimate($event)"
-            @meteranimate="meterAnimate($event)"
-            @mgrhythmanimate="mgrhythmAnimate($event)"
-            @mgharmonyanimate="mgharmonyAnimate($event)"
-            @mgmelodyanimate="mgmelodyAnimate($event)"
-            @fgrhythmanimate="fgrhythmAnimate($event)"
-            name="default"
-        />
-      </b-col>
-    </b-row>
+        </b-col>
+      </b-row>
+    </b-container>
+    <div>
+      <Modal
+        proptype = "modal-popup"
+        title="Help us improve this website!"
+        body="We'd love to hear your feedback"
+        url="google.com"
+        urlstring="Survey link"
+      ></Modal>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import SchenkComposerDAG from "@/components/SchenkComposerDAG.vue";
+import Modal from "@/components/Modal.vue";
 import {ref, Ref, watch, provide, onMounted, computed} from 'vue'
 import {router} from '@/main'
 import {_makeid, delay} from "../../server/data"
@@ -81,6 +102,7 @@ let mgrhythm_anim = ref(false)
 let mgharmony_anim = ref(false)
 let mgmelody_anim = ref(false)
 let fgrhythm_anim = ref(false)
+let sidebar_closed: Ref<boolean> = ref(false)
 
 // Info to access and update particular melodies
 let username: Ref<string> = ref("Anonymous")
@@ -211,4 +233,29 @@ h1 {
   -ms-filter: blur(5px);
   filter: blur(5px);
 }
+
+.pos-static {
+  position: static;
+}
+
+.website-nav {
+  z-index: 5;
+}
+
+.main-content {
+  margin-top: 8em;
+}
+
+.dag-sidebar {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 30em; /* Set the width of the sidebar */
+  position: fixed;
+  z-index: 0; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #fff; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 8em;
+}
+
 </style>
